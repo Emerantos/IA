@@ -53,25 +53,6 @@ Desenvolver um **Sistema de Inferência Fuzzy** para controlar a velocidade de u
 
 ---
 
-## 🧪 Próximas Versões
-
-Futuramente, o controle fuzzy poderá ser **aplicado aos dois veículos (A e B)**, reutilizando as mesmas regras desenvolvidas nesta primeira versão.
-
----
-
-## 📷 Exemplos de Resultados (a serem gerados)
-
-> Insira aqui imagens dos gráficos gerados durante a simulação.
-
----
-
-## 🧑‍💻 Requisitos
-
-- MATLAB (versão compatível com arquivos `.fis` e `.m`)
-- Fuzzy Logic Toolbox
-
----
-
 ## 📄 Licença
 
 Este projeto é apenas para fins educacionais e está sob a licença [MIT](LICENSE).
