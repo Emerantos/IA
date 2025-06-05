@@ -1,45 +1,62 @@
 clc;
 clear;
 
-% Função objetivo (Rosenbrock)
-objetivo = @(x) 100*(x(2) - x(1)^2)^2 + (1 - x(1))^2;
+% Função objetivo (minimização)
+f = @(x) 100*(x(2) - x(1)^2)^2 + (1 - x(1))^2;
 
-% Restrição não linear
-nonlcon = @(x) deal( ...
-    (x(1) - 1/3)^2 + (x(2) - 1/3)^2 - (1/3)^2, ... % c(x) <= 0
-    [] ... % ceq(x) == 0 (não há igualdade)
-);
+% Restrições não lineares
+nonlcon = @(x) deal(...
+    [x(1)*x(2) + x(1) - x(2) + 1.5;  % <= 0
+     10 - x(1)*x(2)], ...           % <= 0
+    []);                           % nenhuma igualdade
 
-% Limites das variáveis
-lb = [0, 0.2];
-ub = [0.5, 0.8];
+% Limites
+lb = [0 0];
+ub = [1 13];
 
-% Rodar GA para encontrar o mínimo
-opts = optimoptions('ga', 'Display', 'iter');
-[x_min, fval_min] = ga(objetivo, 2, [], [], [], [], lb, ub, nonlcon, opts);
+% GA
+[x_opt, fval] = ga(f, 2, [], [], [], [], lb, ub, nonlcon);
 
-fprintf('Mínimo encontrado em x1 = %.4f, x2 = %.4f, f(x) = %.4f\n', x_min(1), x_min(2), fval_min);
-
-% Rodar GA para encontrar o máximo (invertendo a função)
-[x_max, fval_max_neg] = ga(@(x)-objetivo(x), 2, [], [], [], [], lb, ub, nonlcon, opts);
-fval_max = -fval_max_neg;
-
-fprintf('Máximo encontrado em x1 = %.4f, x2 = %.4f, f(x) = %.4f\n', x_max(1), x_max(2), fval_max);
-
-% Plotar a função com mesh
-[x1, x2] = meshgrid(0:0.005:0.5, 0.2:0.005:0.8);
-f = 100.*(x2 - x1.^2).^2 + (1 - x1).^2;
+% Malha para visualização
+[x1_grid, x2_grid] = meshgrid(0:0.05:1, 0:0.5:13);
+z = 100*(x2_grid - x1_grid.^2).^2 + (1 - x1_grid).^2;
 
 figure;
-mesh(x1, x2, f);
-xlabel('x1');
-ylabel('x2');
-zlabel('f(x)');
-title('f(x) = 100(x2 - x1^2)^2 + (1 - x1)^2');
+mesh(x1_grid, x2_grid, z);
 hold on;
+plot3(x_opt(1), x_opt(2), fval, 'ro', 'MarkerSize', 10, 'MarkerFaceColor', 'r');
 
-% Adicionar os pontos mínimo e máximo
-plot3(x_min(1), x_min(2), fval_min, 'ro', 'MarkerSize', 10, 'MarkerFaceColor', 'r');
-plot3(x_max(1), x_max(2), fval_max, 'go', 'MarkerSize', 10, 'MarkerFaceColor', 'g');
-legend('Superfície f(x)', 'Mínimo', 'Máximo');
-hold off;
+xlabel('x1'); ylabel('x2'); zlabel('f(x)');
+title('Questão 5 - Ponto ótimo em vermelho');
+grid on;
+clc;
+clear;
+
+% Função objetivo (minimização)
+f = @(x) 100*(x(2) - x(1)^2)^2 + (1 - x(1))^2;
+
+% Restrições não lineares
+nonlcon = @(x) deal(...
+    [x(1)*x(2) + x(1) - x(2) + 1.5;  % <= 0
+     10 - x(1)*x(2)], ...           % <= 0
+    []);                           % nenhuma igualdade
+
+% Limites
+lb = [0 0];
+ub = [1 13];
+
+% GA
+[x_opt, fval] = ga(f, 2, [], [], [], [], lb, ub, nonlcon);
+
+% Malha para visualização
+[x1_grid, x2_grid] = meshgrid(0:0.05:1, 0:0.5:13);
+z = 100*(x2_grid - x1_grid.^2).^2 + (1 - x1_grid).^2;
+
+figure;
+mesh(x1_grid, x2_grid, z);
+hold on;
+plot3(x_opt(1), x_opt(2), fval, 'ro', 'MarkerSize', 10, 'MarkerFaceColor', 'r');
+
+xlabel('x1'); ylabel('x2'); zlabel('f(x)');
+title('Questão 5 - Ponto ótimo em vermelho');
+grid on;
